@@ -1,0 +1,64 @@
+/**
+  @file magic.c
+  @author Prem Subedi (pksubedi)
+  This program highlights the integer from the text file into red color,
+  skipping the integers that are the part of the identifiers.
+*/
+
+#include <stdio.h>
+#define RED  "\033[31m"    /* Red color */
+#define DEFAULT "\033[0m"  /* Default color */
+#define EXIT_SUCCESS 0
+
+/**
+  Highlights all the free integers (that are not the part of identifiers) with red color.
+ */
+void highlightNumber() 
+{
+  int ch = getchar();
+  printf(RED); 
+  while (ch >= '0' && ch <= '9') {
+   putchar(ch);
+   ch = getchar();
+  }
+  ungetc(ch, stdin);
+  printf(DEFAULT); 
+}
+
+/**
+  Skips the identifier from being get colored.
+ */
+void skipIdentifier()
+{
+  int ch = getchar();
+  while ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || 
+    ch == '_' || (ch >= '0' && ch <= '9')) {
+  putchar(ch);
+  ch = getchar();
+  }
+  ungetc(ch, stdin);
+}
+
+/**
+  Starting point for the program, which calls two other helper functions
+  to highlight integers involved in the input text file.
+ */
+int main()
+{
+  int ch;
+  // Read all the characters from standard input.
+  while ( (ch = getchar() ) != EOF)
+  {
+    if ((ch >= 'A' && ch <= 'Z')|| (ch >= 'a' && ch <= 'z') || ch == '_') {
+      ungetc(ch, stdin);
+      skipIdentifier();
+    } else if (ch >= '0' && ch <= '9') {
+      ungetc(ch, stdin);
+      highlightNumber();
+    }
+    else {
+    putchar(ch);
+    }
+  } 
+  return EXIT_SUCCESS;
+}
